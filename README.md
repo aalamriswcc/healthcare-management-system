@@ -31,12 +31,11 @@ A comprehensive management system designed for a network of 6 hospitals with a c
 
 ### التقنيات المستخدمة | Technology Stack
 
-- **قاعدة البيانات | Database:** PostgreSQL
-- **الواجهة الخلفية | Backend:** Node.js + Express.js
+- **المنصة الخلفية | Backend Platform:** Supabase (PostgreSQL + Auth + Auto-generated APIs)
 - **الواجهة الأمامية | Frontend:** React.js
-- **إدارة الحالة | State Management:** Redux
+- **النشر | Deployment:** Vercel
+- **إدارة الحالة | State Management:** Redux Toolkit
 - **التصميم | UI Framework:** Material-UI
-- **المصادقة | Authentication:** JWT
 
 ### متطلبات النظام | System Requirements
 
@@ -46,22 +45,31 @@ A comprehensive management system designed for a network of 6 hospitals with a c
 
 ### التثبيت والتشغيل | Installation & Setup
 
-```bash
-# استنساخ المستودع
-git clone https://github.com/aalamriswcc/healthcare-management-system.git
+1.  **استنساخ المستودع:**
+    ```bash
+    git clone https://github.com/aalamriswcc/healthcare-management-system.git
+    cd healthcare-management-system
+    ```
 
-# الانتقال إلى مجلد المشروع
-cd healthcare-management-system
+2.  **إعداد متغيرات البيئة (Supabase):**
+    - قم بإنشاء ملف `.env.local` في مجلد `frontend`.
+    - أضف متغيرات البيئة الخاصة بـ Supabase:
+      ```
+      REACT_APP_SUPABASE_URL=your-supabase-url
+      REACT_APP_SUPABASE_ANON_KEY=your-supabase-anon-key
+      ```
 
-# تثبيت التبعيات
-npm install
+3.  **تثبيت التبعيات وتشغيل الواجهة الأمامية:**
+    ```bash
+    cd frontend
+    npm install
+    npm start
+    ```
 
-# إعداد قاعدة البيانات
-npm run db:setup
-
-# تشغيل الخادم
-npm run dev
-```
+4.  **نشر على Vercel:**
+    - قم بتثبيت Vercel CLI: `npm install -g vercel`
+    - قم بتسجيل الدخول: `vercel login`
+    - قم بالنشر: `vercel`
 
 ### هيكل المشروع | Project Structure
 
