@@ -1,66 +1,39 @@
-import { useState, useEffect } from 'react';
-import { supabase } from './lib/supabaseClient';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import Navigation from './components/Navigation';
+import Dashboard from './pages/Dashboard';
+import Hospitals from './pages/Hospitals';
+import MedicalDevices from './pages/MedicalDevices';
+import Inventory from './pages/Inventory';
+import Employees from './pages/Employees';
+import Reports from './pages/Reports';
+import Settings from './pages/Settings';
 import './App.css';
 
+// Create a client
+const queryClient = new QueryClient();
+
 function App() {
-  const [hospitals, setHospitals] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchHospitals = async () => {
-      try {
-        // The table name in the schema is 'hospitals' in the 'core' schema.
-        // Supabase requires you to specify the schema if it's not 'public'.
-        // However, for this test, let's assume it's accessible directly.
-        // If this fails, we may need to adjust RLS policies in Supabase.
-        const { data, error } = await supabase.from('hospitals').select('*');
-        
-        if (error) {
-          throw error;
-        }
-        
-        setHospitals(data);
-      } catch (error) {
-        console.error('Error fetching hospitals:', error);
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchHospitals();
-  }, []);
-
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Healthcare Management System</h1>
-        <h2>Supabase Connection Test</h2>
-        {loading && <p>Loading hospitals...</p>}
-        {error && <p style={{ color: 'red' }}>Error: {error}</p>}
-        {hospitals && hospitals.length > 0 ? (
-          <div>
-            <h3>Hospitals Found:</h3>
-            <ul>
-              {hospitals.map((hospital) => (
-                <li key={hospital.id}>{hospital.name} (ID: {hospital.id})</li>
-              ))}
-            </ul>
-          </div>
-        ) : (
-          !loading && !error && <p>No hospitals found. Please check the following:</p>
-        )}
-        {!loading && !error && hospitals.length === 0 && (
-            <ul>
-                <li>Is there data in the 'core.hospitals' table in your Supabase project?</li>
-                <li>Are the Row Level Security (RLS) policies on the 'hospitals' table configured to allow read access for anonymous users?</li>
-            </ul>
-        )}
-      </header>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <div className="min-h-screen bg-background">
+          <Navigation />
+          <main className="container mx-auto px-4 py-6">
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/hospitals" element={<Hospitals />} />
+              <Route path="/devices" element={<MedicalDevices />} />
+              <Route path="/inventory" element={<Inventory />} />
+              <Route path="/employees" element={<Employees />} />
+              <Route path="/reports" element={<Reports />} />
+              <Route path="/settings" element={<Settings />} />
+            </Routes>
+          </main>
+        </div>
+      </Router>
+    </QueryClientProvider>
   );
 }
 
 export default App;
-
